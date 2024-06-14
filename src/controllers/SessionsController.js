@@ -25,7 +25,30 @@ class SessionsController {
       expiresIn
     });
 
-    return res.status(201).json({ user, token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000
+    });
+
+    delete user.password, user.role;
+
+    return res.status(201).json({ user });
+  }
+
+  async delete(req, res) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true
+    });
+
+    return res.status(200).json();
+  }
+
+  async show(req, res) {
+    return res.json({ role: req.user.role });
   }
 }
 

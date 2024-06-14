@@ -3,13 +3,13 @@ const authConfig = require("../config/auth");
 const AppError = require("../utils/AppError");
 
 function ensureAuth(req, res, next) {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers;
 
-  if(!authHeader) {
+  if(!authHeader.cookie) {
     throw new AppError('Not available JWT');
   }
 
-  const [, token] = authHeader.split(' ');
+  const [, token] = authHeader.cookie.split('token=');
 
   try {
     const { role, sub: user_id } = verify(token, authConfig.jwt.secret);

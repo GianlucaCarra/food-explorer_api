@@ -34,9 +34,7 @@ class CloudinaryStorage {
   async deleteFile(publicId) {
     try {
       await cloudinary.uploader.destroy(publicId);
-      console.log('Deleted in cloud:', publicId);
     } catch (error) {
-      console.error("Error deleting in cloud:", error);
       throw error;
     }
   }

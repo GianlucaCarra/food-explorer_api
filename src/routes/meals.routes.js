@@ -14,9 +14,8 @@ mealsRoutes.use(ensureAuth);
 mealsRoutes.post("/create", verifyRole(["admin"]), upload.single("img"), mealsController.create);
 mealsRoutes.delete("/delete/:id", verifyRole(["admin"]), mealsController.delete);
 mealsRoutes.patch("/update/:id", verifyRole(["admin"]), upload.single("img"), mealsController.update);
-mealsRoutes.get("/indexmeal", mealsController.indexMeal);
-mealsRoutes.get("/indexdessert", mealsController.indexDessert);
-mealsRoutes.get("/indexdrink", mealsController.indexDrink);
+mealsRoutes.get("/index", mealsController.index);
+mealsRoutes.get("/search", mealsController.search);
 mealsRoutes.get("/:id", mealsController.show);
 
 module.exports = mealsRoutes;

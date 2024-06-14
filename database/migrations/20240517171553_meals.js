@@ -1,31 +1,37 @@
 exports.up = async knex => {
+  // Correctly define the 'types' enum type if it doesn't exist
   await knex.schema.raw(`
-    DO $$ 
-    BEGIN 
+    DO $$
+    BEGIN
       IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'types') THEN
-        CREATE TYPE roles AS ENUM ('meal', 'dessert', 'drink');
+        CREATE TYPE types AS ENUM ('meal', 'dessert', 'drink');
       END IF;
     END$$;
   `);
 
+  // Create the 'meals' table
   return knex.schema.createTable("meals", table => {
     table.increments("id").primary();
     table.string("name").notNullable();
     table.string("desc").notNullable();
     table.decimal("price", 10, 2).notNullable();
-    table.enu("type", ["meal", "dessert", "drink"], { useNative: true, enumName: "types" })
-    .notNullable().defaultTo("meal");
+    table.string("imageUrl");
+    table.string("publicId");
+    table.enu("type", null, { useNative: true, existingType: true, enumName: "types" })
+      .notNullable().defaultTo("meal");
 
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });
 };
 
 exports.down = async knex => {
+  // Drop the 'meals' table if it exists
   await knex.schema.dropTableIfExists('meals');
 
+  // Drop the 'types' enum type if it exists
   await knex.schema.raw(`
-    DO $$ 
-    BEGIN 
+    DO $$
+    BEGIN
       IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'types') THEN
         DROP TYPE types;
       END IF;

@@ -1,4 +1,6 @@
 const path = require("path");
+require('dotenv').config();
+const fs = require("fs");
 
 module.exports = {
   development: {
@@ -18,9 +20,12 @@ module.exports = {
   },
   production: {
     client: 'pg',
-    connection: "",
+    connection: process.env.PG_CONNECTION,
     migrations: {
       directory: path.resolve(__dirname, "database", "migrations")
+    },
+    ssl: {
+      ca: fs.readFileSync(__dirname + '/certs/pg-credentials.crt')
     }
   }
 };

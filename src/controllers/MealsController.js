@@ -33,35 +33,47 @@ class MealsController {
   
       await knex("ingredients").insert(ingredientsInsert);
     }
-
+    
     return res.json();
   }
 
-  async indexMeal(req, res) {
-    const meals = await knex("meals").where({ type: "meal" });
-
+  async index(req, res) {
+    const meals = await knex("meals");
 
     return res.json(meals);
   }
 
-  async indexDessert(req, res) {
-    const desserts = await knex("meals").where({ type: "dessert" });
+  async search(req, res) {
+    const { query } = req.query;
 
+    const mealResults = await knex('meals')
+      .whereLike('name', `%${ query }%`)
+      .orderBy('name');
 
-    return res.json(desserts);
-  }
+    const ingredientsResults = await knex('ingredients')
+      .whereLike('name', `%${ query }%`)
+      .select("meal_id");
 
-  async indexDrink(req, res) {
-    const drinks = await knex("meals").where({ type: "drink" });
+    const mealIdsFromIngredients = ingredientsResults.map(ingredient => ingredient.meal_id);
 
+    const ingredientMealResults = await knex('meals')
+      .whereIn('id', mealIdsFromIngredients)
+      .orderBy('name');
 
-    return res.json(drinks);
+    const combinedResults = [...mealResults, ...ingredientMealResults]
+    .filter((meal, index, self) => 
+      index === self.findIndex((m) => m.id === meal.id)
+    );
+
+    return res.json(combinedResults)
   }
 
   async show(req, res) {
     const { id } = req.params;
     const meal = await knex("meals").where({ id }).first();
-    const ingredients = await knex("ingredients").where({ meal_id: id }).orderBy("name");
+    const ingredients = await knex("ingredients")
+      .where({ meal_id: id })
+        .orderBy("name");
 
     return res.json({ 
       ...meal,
@@ -76,6 +88,8 @@ class MealsController {
 
     const parseData = JSON.parse(data);
     const meal = await knex("meals").where({ id }).first();
+    const existingIngredients = await knex("ingredients")
+    .where({ meal_id: id });
 
     const cloudinaryStorage = new CloudinaryStorage();
 
@@ -86,7 +100,7 @@ class MealsController {
     let publicId = meal.publicId;
     let imageUrl = meal.imageUrl;
 
-    if (file) {
+    if(file) {
       await cloudinaryStorage.deleteFile(meal.publicId);
       const result = await cloudinaryStorage.saveFile(file.buffer);
       publicId = result.publicId;
@@ -102,7 +116,27 @@ class MealsController {
       imageUrl
     };
 
-    await knex("meals").update(updatedMeal);
+    const newIngredientNames = parseData.ingredients || meal.ingredients;
+    const existingIngredientNames = existingIngredients.map(ingredient => ingredient.name);
+    const ingredientsToAdd = newIngredientNames.filter(name => !existingIngredientNames.includes(name));
+    const ingredientsToRemove = existingIngredientNames.filter(name => !newIngredientNames.includes(name));
+
+    const newIngredients = ingredientsToAdd.map(name => ({
+      name,
+      meal_id: id
+    }));
+
+    await knex("meals").where({ id }).update(updatedMeal);
+    if(newIngredients.length > 0) {
+      await knex("ingredients").insert(newIngredients);
+    }
+
+    if(ingredientsToRemove.length > 0) {
+      await knex("ingredients")
+        .where({ meal_id: id })
+        .whereIn('name', ingredientsToRemove)
+        .del();
+    }
 
     return res.json();
   }
@@ -113,7 +147,6 @@ class MealsController {
     const cloudinaryStorage = new CloudinaryStorage();
 
     await cloudinaryStorage.deleteFile(meal.publicId);
-
     await knex("meals").where({ id }).delete();
     
     return res.json();
