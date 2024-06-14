@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server.js",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon ./src/server.js",
     "migrate": "npx knex migrate:latest",
     "rollback": "npx knex migrate:rollback --all"
@@ -27,6 +27,7 @@
     "knex": "^3.1.0",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.5",
+    "pm2": "^5.4.0",
     "psql": "^0.0.1",
     "sqlite3": "^5.1.7"
   }
