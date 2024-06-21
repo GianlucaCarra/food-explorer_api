@@ -48,6 +48,7 @@ class SessionsController {
   }
 
   async show(req, res) {
+    console.log(req.user.role)
     return res.json({ role: req.user.role });
   }
 }

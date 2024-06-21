@@ -11,9 +11,7 @@ const PORT = 3334;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: [
-    "https://food-explorer-web-ten.vercel.app"
-  ],
+  origin: "https://food-explorer-web-ten.vercel.app",
   credentials: true
 }));
 app.use(routes);
