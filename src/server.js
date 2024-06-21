@@ -14,6 +14,12 @@ app.use(cors({
   origin: "https://food-explorer-web-ten.vercel.app",
   credentials: true
 }));
+
+app.use((req, res, next) => {
+  res.setHeader('Permissions-Policy', '');
+  next();
+});
+
 app.use(routes);
 
 app.use((error, req, res, next) => {
@@ -32,4 +38,4 @@ app.use((error, req, res, next) => {
   });
 })
 
-app.listen(PORT, () => console.log("server is running on port:" + PORT));
+app.listen(PORT);
