@@ -32,7 +32,7 @@ class SessionsController {
       maxAge: 24 * 60 * 60 * 1000
     });
 
-    delete user.password;
+    delete user.password, user.role;
 
     return res.status(201).json({ user });
   }

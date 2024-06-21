@@ -7,6 +7,6 @@ const ensureAuth = require("../middlewares/ensureAuth");
 
 sessionsRoutes.post("/", sessionsController.create);
 sessionsRoutes.delete("/logout", sessionsController.delete);
-sessionsRoutes.get("/role", sessionsController.show);
+sessionsRoutes.get("/role", ensureAuth, sessionsController.show);
 
 module.exports = sessionsRoutes;
