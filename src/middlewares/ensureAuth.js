@@ -4,6 +4,7 @@ const AppError = require("../utils/AppError");
 
 function ensureAuth(req, res, next) {
   const authHeader = req.headers;
+  concole.log(authHeader)
 
   if(!authHeader.cookie) {
     throw new AppError('Not available JWT');
