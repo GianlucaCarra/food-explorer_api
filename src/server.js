@@ -16,7 +16,7 @@ app.use(cors({
 }));
 
 app.use((req, res, next) => {
-  res.setHeader('Permissions-Policy', '');
+  res.setHeader('Permissions-Policy', 'directive=value');
   next();
 });
 
