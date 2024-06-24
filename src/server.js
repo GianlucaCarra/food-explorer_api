@@ -16,8 +16,6 @@ app.use(cors({
     "https://food-explorer-web-gianlucacarras-projects.vercel.app",
     "https://food-explorer-web-git-main-gianlucacarras-projects.vercel.app"
   ],
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
   credentials: true
 }));
 
