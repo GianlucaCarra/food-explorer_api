@@ -10,7 +10,16 @@ const PORT = 3334;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://food-explorer-web-ten.vercel.app",
+    "https://food-explorer-web-gianlucacarras-projects.vercel.app",
+    "https://food-explorer-web-git-main-gianlucacarras-projects.vercel.app"
+  ],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}));
 
 app.use(routes);
 
