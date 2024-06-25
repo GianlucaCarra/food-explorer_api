@@ -27,6 +27,7 @@ class SessionsController {
 
     res.cookie("token", token, {
       httpOnly: true,
+      secure: true,
       sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000
     });
@@ -39,6 +40,7 @@ class SessionsController {
   async delete(req, res) {
     res.clearCookie("token", {
       httpOnly: true,
+      secure: true,
       sameSite: "lax"
     });
 
