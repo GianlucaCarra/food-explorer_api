@@ -2,7 +2,7 @@ require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const cors = require("cors");
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
 const routes = require("./routes");
 const AppError = require("./utils/AppError");
 const app = express();
@@ -12,9 +12,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   origin: [
-    "https://food-explorer-web-ten.vercel.app",
-    "https://food-explorer-web-gianlucacarras-projects.vercel.app",
-    "https://food-explorer-web-git-main-gianlucacarras-projects.vercel.app"
+    "https://app.vististudi.online",
+    "https://api.vististudi.online"
   ],
   credentials: true
 }));
