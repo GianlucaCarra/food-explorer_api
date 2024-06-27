@@ -28,7 +28,8 @@ class SessionsController {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "Lax",
+      sameSite: "None",
+      domain: ".vististudi.online",
       maxAge: 24 * 60 * 60 * 1000
     });
 
@@ -41,7 +42,8 @@ class SessionsController {
     res.clearCookie("token", {
       httpOnly: true,
       secure: true,
-      sameSite: "Lax"
+      sameSite: "None",
+      domain: ".vististudi.online",
     });
 
     return res.status(200).json();

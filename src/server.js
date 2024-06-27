@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     "https://app.vististudi.online",
-    "https://api.vististudi.online",
+    "https://api.vististudi.online"
   ],
   credentials: true
 }));
