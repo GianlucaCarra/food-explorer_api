@@ -52,6 +52,12 @@ class SessionsController {
   async show(req, res) {
     return res.json({ role: req.user.role });
   }
+
+  async teste(req, res) {
+    const { teste } = req.body;
+
+    res.json(teste);
+  }
 }
 
 module.exports = SessionsController;
