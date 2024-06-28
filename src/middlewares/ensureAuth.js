@@ -8,7 +8,7 @@ function ensureAuth(req, res, next) {
   console.log(cookies)
 
   if(!token) {
-    throw new AppError('Not available JWT');
+    throw new AppError('Not available JWT', 422);
   }
   
   try {
