@@ -7,7 +7,7 @@ function ensureAuth(req, res, next) {
   const { token } = cookies;
 
   if(!token) {
-    throw new AppError('Not available JWT', 422);
+    throw new AppError('Not available JWT');
   }
   
   try {
