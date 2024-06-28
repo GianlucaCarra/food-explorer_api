@@ -5,7 +5,6 @@ const AppError = require("../utils/AppError");
 function ensureAuth(req, res, next) {
   const cookies = req.cookies;
   const { token } = cookies;
-  console.log(cookies)
 
   if(!token) {
     throw new AppError('Not available JWT', 422);
