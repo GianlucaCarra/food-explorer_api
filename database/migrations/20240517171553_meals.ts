@@ -1,4 +1,6 @@
-exports.up = async knex => {
+import { Knex } from "knex";
+
+exports.up = async (knex: Knex): Promise<void> => {
   // Correctly define the 'types' enum type if it doesn't exist
   await knex.schema.raw(`
     DO $$
@@ -24,7 +26,7 @@ exports.up = async knex => {
   });
 };
 
-exports.down = async knex => {
+exports.down = async (knex: Knex): Promise<void> => {
   // Drop the 'meals' table if it exists
   await knex.schema.dropTableIfExists('meals');
 

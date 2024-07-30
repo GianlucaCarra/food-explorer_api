@@ -1,6 +1,6 @@
-const path = require("path");
+import { Database } from "sqlite3";
 require('dotenv').config();
-const fs = require("fs");
+const path = require("path");
 
 module.exports = {
   development: {
@@ -9,7 +9,7 @@ module.exports = {
       filename: path.resolve(__dirname, "database", "database.db")
     },
     pool: {
-      afterCreate: (conn, cb) => {
+      afterCreate: (conn: Database, cb: (err?: Error | null) => void) => {
         conn.run('PRAGMA foreign_keys = ON', cb);
       }
     },
@@ -25,7 +25,7 @@ module.exports = {
       directory: path.resolve(__dirname, "database", "migrations")
     },
     ssl: {
-      ca: fs.readFileSync(__dirname + '/certs/pg-credentials.crt')
+      rejectUnauthorized: false,
     }
   }
 };

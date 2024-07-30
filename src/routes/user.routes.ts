@@ -1,4 +1,4 @@
-const { Router } = require("express")
+import { Router } from "express";
 const userRoutes = Router();
 
 const UserController = require("../controllers/UserController");

@@ -1,3 +1,6 @@
+import { Request, Response, NextFunction } from "express";
+import { IAppError } from "./utils/AppError";
+
 require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
@@ -20,7 +23,7 @@ app.use(cors({
 
 app.use(routes);
 
-app.use((error, req, res, next) => {
+app.use((error: IAppError, req: Request, res: Response, next: NextFunction) => {
   if(error instanceof AppError) {
     return res.status(error.statusCode).json({
       status: "error",
@@ -36,4 +39,4 @@ app.use((error, req, res, next) => {
   });
 })
 
-app.listen(PORT);
+app.listen(PORT, console.log("Running on: " + PORT));

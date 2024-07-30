@@ -1,9 +1,15 @@
+import { Request, Response } from "express";
 const knex = require("../../database/knex");
 const CloudinaryStorage = require("../providers/CloudinaryStorage");
 const AppError = require("../utils/AppError");
 
+interface IIngredient {
+  meal_id: number;
+  name: string;
+}
+
 class MealsController {
-  async create(req, res) {
+  async create(req: Request, res: Response): Promise<Response> {
     const { file } = req;
     const { data } = req.body;
     const parseData = JSON.parse(data);
@@ -11,7 +17,7 @@ class MealsController {
     const cloudinaryStorage = new CloudinaryStorage();
 
     if(!file) {
-      throw new AppError("File is required!");
+      throw new AppError("File is required!", 404);
     }
 
     const { publicId, imageUrl } = await cloudinaryStorage.saveFile(file.buffer);
@@ -26,7 +32,7 @@ class MealsController {
     });
 
     if(ingredients.length > 0) {
-      const ingredientsInsert = ingredients.map(ingredient => ({
+      const ingredientsInsert = ingredients.map((ingredient: string) => ({
         name: ingredient,
         meal_id
       }));
@@ -37,24 +43,24 @@ class MealsController {
     return res.json();
   }
 
-  async index(req, res) {
+  async index(req: Request, res: Response): Promise<Response> {
     const meals = await knex("meals");
 
     return res.json(meals);
   }
 
-  async search(req, res) {
+  async search(req: Request, res: Response): Promise<Response> {
     const { query } = req.query;
 
     const mealResults = await knex('meals')
-      .whereLike('name', `%${ query }%`)
+      .whereLike('name', `%${query}%`)
       .orderBy('name');
 
     const ingredientsResults = await knex('ingredients')
-      .whereLike('name', `%${ query }%`)
+      .whereLike('name', `%${query}%`)
       .select("meal_id");
 
-    const mealIdsFromIngredients = ingredientsResults.map(ingredient => ingredient.meal_id);
+    const mealIdsFromIngredients = ingredientsResults.map((ingredient: IIngredient) => ingredient.meal_id);
 
     const ingredientMealResults = await knex('meals')
       .whereIn('id', mealIdsFromIngredients)
@@ -68,7 +74,7 @@ class MealsController {
     return res.json(combinedResults)
   }
 
-  async show(req, res) {
+  async show(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const meal = await knex("meals").where({ id }).first();
     const ingredients = await knex("ingredients")
@@ -81,7 +87,7 @@ class MealsController {
     });
   }
 
-  async update(req, res) {
+  async update(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const { file } = req;
     const { data } = req.body;
@@ -117,16 +123,17 @@ class MealsController {
     };
 
     const newIngredientNames = parseData.ingredients || meal.ingredients;
-    const existingIngredientNames = existingIngredients.map(ingredient => ingredient.name);
-    const ingredientsToAdd = newIngredientNames.filter(name => !existingIngredientNames.includes(name));
-    const ingredientsToRemove = existingIngredientNames.filter(name => !newIngredientNames.includes(name));
+    const existingIngredientNames = existingIngredients.map((ingredient: IIngredient) => ingredient.name);
+    const ingredientsToAdd = newIngredientNames.filter((name: string)=> !existingIngredientNames.includes(name));
+    const ingredientsToRemove = existingIngredientNames.filter((name: string)=> !newIngredientNames.includes(name));
 
-    const newIngredients = ingredientsToAdd.map(name => ({
+    const newIngredients = ingredientsToAdd.map((name: string) => ({
       name,
       meal_id: id
     }));
 
     await knex("meals").where({ id }).update(updatedMeal);
+
     if(newIngredients.length > 0) {
       await knex("ingredients").insert(newIngredients);
     }
@@ -141,7 +148,7 @@ class MealsController {
     return res.json();
   }
 
-  async delete(req, res) {
+  async delete(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const meal = await knex("meals").where({ id }).first();
     const cloudinaryStorage = new CloudinaryStorage();

@@ -1,4 +1,6 @@
-exports.up = async knex => {
+import { Knex } from "knex";
+
+exports.up = async (knex: Knex): Promise<void>  => {
   // Create the 'roles' type if it doesn't exist
   await knex.schema.raw(`
     DO $$
@@ -10,7 +12,7 @@ exports.up = async knex => {
   `);
 
   // Create the 'users' table
-  await knex.schema.createTable("users", table => {
+  return knex.schema.createTable("users", table => {
     table.increments("id").primary();
     table.string("name").notNullable();
     table.string("email").notNullable();
@@ -21,7 +23,7 @@ exports.up = async knex => {
   });
 };
 
-exports.down = async knex => {
+exports.down = async (knex: Knex): Promise<void> => {
   // Drop the 'users' table if it exists
   await knex.schema.dropTableIfExists('users');
 

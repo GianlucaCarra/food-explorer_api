@@ -1,4 +1,4 @@
-const { Router } = require("express")
+import { Router } from "express";
 const sessionsRoutes = Router();
 
 const SessionsController = require("../controllers/SessionsController");

@@ -1,3 +1,5 @@
+import { Response, Request } from "express";
+import { IRequestMiddleware } from "../middlewares/ensureAuth";
 const knex = require("../../database/knex")
 const AppError = require("../utils/AppError");
 const { compare } = require("bcryptjs");
@@ -5,7 +7,7 @@ const authConfig = require("../config/auth");
 const { sign } = require("jsonwebtoken");
 
 class SessionsController {
-  async create(req, res) {
+  async create(req: Request, res: Response): Promise<Response> {
     const { email, password } = req.body;
     const user = await knex("users").where({ email }).first();
 
@@ -28,7 +30,7 @@ class SessionsController {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
       domain: ".vististudi.online",
       maxAge: 24 * 60 * 60 * 1000
     });
@@ -38,18 +40,18 @@ class SessionsController {
     return res.status(201).json({ user });
   }
 
-  async delete(req, res) {
+  async delete(req: Request, res: Response): Promise<Response> {
     res.clearCookie("token", {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
+      sameSite: "none",
       domain: ".vististudi.online",
     });
 
     return res.status(200).json();
   }
 
-  async show(req, res) {
+  async show(req: IRequestMiddleware, res: Response): Promise<Response> {
     return res.json({ role: req.user.role });
   }
 }

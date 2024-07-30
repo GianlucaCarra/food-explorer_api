@@ -1,9 +1,11 @@
+import { Request } from "express";
+
 const knex = require("../../database/knex");
 const AppError = require("../utils/AppError");
 const { hash } = require("bcryptjs");
 
 class UserController {
-  async create(req, res) {
+  async create(req: Request, res: Response): Promise<Response> {
     const { name, email, password } = req.body;
 
     const checkIfUserExists = await knex("users").where({ email }).first();

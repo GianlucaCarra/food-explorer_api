@@ -1,6 +1,6 @@
-const { Router } = require("express")
-const mealsRoutes = Router();
+import { Router } from "express";
 const multer = require("multer");
+const mealsRoutes = Router();
 const upload = multer();
 
 const MealsController = require("../controllers/MealsController");

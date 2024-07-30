@@ -1,8 +1,16 @@
+import { Request, Response, NextFunction } from "express";
 const { verify } = require("jsonwebtoken");
 const authConfig = require("../config/auth");
 const AppError = require("../utils/AppError");
 
-function ensureAuth(req, res, next) {
+export interface IRequestMiddleware extends Request {
+  user: {
+    id: number,
+    role: string
+  }
+}
+
+function ensureAuth(req: IRequestMiddleware, res: Response, next: NextFunction) {
   const cookies = req.cookies;
   const { token } = cookies;
 
