@@ -15,14 +15,14 @@ module.exports = {
     },
     useNullAsDefault: true,
     migrations: {
-      directory: path.resolve(__dirname, "database", "migrationsDev")
+      directory: path.resolve(__dirname, "dist", "database", "migrationsDev")
     }
   },
   production: {
     client: 'pg',
     connection: process.env.PG_CONNECTION,
     migrations: {
-      directory: path.resolve(__dirname, "database", "migrations")
+      directory: path.resolve(__dirname, "dist", "database", "migrations")
     },
     ssl: {
       rejectUnauthorized: false,
