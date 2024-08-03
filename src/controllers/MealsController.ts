@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-const knex = require("../../database/knex");
+const knex = require("@database/knex");
 const CloudinaryStorage = require("../providers/CloudinaryStorage");
 const AppError = require("../utils/AppError");
 

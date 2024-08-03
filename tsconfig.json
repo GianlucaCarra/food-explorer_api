@@ -6,7 +6,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist"
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@database/*": ["database/*"],
+    }
   },
   "include": ["src/**/*", "database/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]

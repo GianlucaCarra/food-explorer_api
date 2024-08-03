@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { IRequestMiddleware } from "../middlewares/ensureAuth";
-const knex = require("../../database/knex")
+const knex = require("@database/knex")
 const AppError = require("../utils/AppError");
 const { compare } = require("bcryptjs");
 const authConfig = require("../config/auth");

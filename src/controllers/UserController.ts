@@ -1,6 +1,5 @@
 import { Request } from "express";
-
-const knex = require("../../database/knex");
+const knex = require("@database/knex");
 const AppError = require("../utils/AppError");
 const { hash } = require("bcryptjs");
 
