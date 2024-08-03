@@ -1,4 +1,3 @@
-import { Database } from "sqlite3";
 require('dotenv').config();
 const path = require("path");
 
@@ -9,7 +8,7 @@ module.exports = {
       filename: path.resolve(__dirname, "database", "database.db")
     },
     pool: {
-      afterCreate: (conn: Database, cb: (err?: Error | null) => void) => {
+      afterCreate: (conn, cb) => {
         conn.run('PRAGMA foreign_keys = ON', cb);
       }
     },

@@ -2,9 +2,10 @@
   "name": "food-explorer-api",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.ts",
+  "main": "dist/src/server.js",
   "scripts": {
-    "start": "pm2-runtime start ecosystem.config.ts --env production",
+    "build": "npx tsc",
+    "start": "pm2-runtime start ecosystem.config.js --env production",
     "dev": "nodemon --exec 'ts-node' src/server.ts",
     "migrate": "npx knex migrate:latest",
     "rollback": "npx knex migrate:rollback --all"
