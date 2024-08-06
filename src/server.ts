@@ -24,14 +24,12 @@ app.use(cors({
 app.use(routes);
 
 app.use((error: IAppError, req: Request, res: Response, next: NextFunction) => {
-  if(error instanceof AppError) {
+  if(error) {
     return res.status(error.statusCode).json({
       status: "error",
       message: error.message
     });
   }
-
-  console.log(error);
 
   return res.status(500).json({
     status: 'error',
